@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * CurrencyConversionController
@@ -29,7 +30,7 @@ public class CCControllerRest {
     @Autowired
     private CurrencyExchangeServiceProxy proxy;
 
-    @RequestMapping(value = "/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
+     @RequestMapping(value = "/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversionBean convertCurrencyFeign(@PathVariable String from, @PathVariable String to,
                                                        @PathVariable BigDecimal quantity) {
         CurrencyConversionBean response = proxy.retrieveExchangeValue(from, to);
@@ -48,8 +49,35 @@ public class CCControllerRest {
                 "http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversionBean.class,
                 uriVariables);
         CurrencyConversionBean response = responseEntity.getBody();
-        System.out.println(response.getId());
+        logger.info("{}", response);
         return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
                 quantity.multiply(response.getConversionMultiple()), response.getPort());
     }
+
+
+
+
+
+    @GetMapping(value = "/currency-converter-async/from/{from}/to/{to}/quantity/{quantity}"/*, consumes = "application/json"*/)
+    public CurrencyConversionBean convertCurrencyAsync(@PathVariable String from, @PathVariable String to,
+                                                  @PathVariable BigDecimal quantity) throws ExecutionException, InterruptedException {
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put("from", from);
+        uriVariables.put("to", to);
+        logger.info("Before request++++++++++++++");
+//
+        ResponseEntity<CurrencyConversionBean> responseEntity = new RestTemplate().getForEntity(
+                "http://localhost:8000/currency-exchange-async/from/{from}/to/{to}",
+                CurrencyConversionBean.class,
+                uriVariables);
+
+        logger.info("After request++++++++++++++");
+
+        CurrencyConversionBean currencyConversionBean = responseEntity.getBody();
+
+        logger.info("{}", currencyConversionBean);
+        return new CurrencyConversionBean(currencyConversionBean.getId(), from, to, currencyConversionBean.getConversionMultiple(), quantity,
+                quantity.multiply(currencyConversionBean.getConversionMultiple()), currencyConversionBean.getPort());
+    }
+
 }

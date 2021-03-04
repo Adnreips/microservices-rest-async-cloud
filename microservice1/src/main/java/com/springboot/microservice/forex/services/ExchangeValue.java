@@ -40,5 +40,4 @@ public class ExchangeValue implements Serializable {
     private BigDecimal totalCalculatedAmount;
     private int port;
 
-
 }

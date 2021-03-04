@@ -1,20 +1,19 @@
 package com.springboot.microservice.forex.controllers;
 
-import com.springboot.microservice.forex.jms.MessageListener;
-import com.springboot.microservice.forex.services.ExchangeValue;
 import com.springboot.microservice.forex.repositories.ExchangeValueRepository;
+import com.springboot.microservice.forex.services.ExchangeValue;
+import com.springboot.microservice.forex.services.ExchangeValueService;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.jms.Message;
-import java.awt.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * ForexController
@@ -28,32 +27,48 @@ public class ForexControllerRest {
     private Logger logger = LoggerFactory.getLogger(ForexControllerRest.class);
 
     Integer count = 1;
-//    @Autowired
+
     private Environment environment;
 
-//    @Autowired
     private ExchangeValueRepository repository;
 
-    @Autowired
-    public ForexControllerRest(Environment environment, ExchangeValueRepository repository) {
-        this.environment = environment;
-        this.repository = repository;
-    }
+    private ExchangeValueService exchangeValueService;
 
     public ForexControllerRest() {
     }
 
+    @Autowired
+    public ForexControllerRest(Environment environment,
+                               ExchangeValueRepository repository,
+                               ExchangeValueService exchangeValueService) {
+        this.environment = environment;
+        this.repository = repository;
+        this.exchangeValueService = exchangeValueService;
+    }
+
     @RequestMapping(value = "/currency-exchange/from/{from}/to/{to}")
     public ExchangeValue retrieveExchangeValue
-            (@PathVariable String from, @PathVariable String to){
-
-
+            (@PathVariable String from, @PathVariable String to) {
         ExchangeValue exchangeValue =
                 repository.findByFromAndTo(from, to);
-
         exchangeValue.setPort(
                 Integer.parseInt(environment.getProperty("local.server.port")));
         logger.info(String.valueOf(count++));
+        return exchangeValue;
+    }
+
+    @RequestMapping(value = "/currency-exchange-async/from/{from}/to/{to}")
+    public ExchangeValue retrieveExchangeValueAsync
+            (@PathVariable String from, @PathVariable String to) {
+
+        ExchangeValue exchangeValue = null;
+        try {
+            exchangeValue = exchangeValueService.getAsyncResult(from, to).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return exchangeValue;
     }
 }

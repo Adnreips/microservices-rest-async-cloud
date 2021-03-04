@@ -57,6 +57,7 @@ public class ActiveMqConfig {
         connectionFactory.setUserName(userName);
         connectionFactory.setPassword(password);
         connectionFactory.setTrustedPackages(Arrays.asList("com.springboot"));
+
         return connectionFactory;
     }
 
