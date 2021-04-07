@@ -1,5 +1,6 @@
 package com.springboot.microservice.forex;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -14,13 +15,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableAsync
-public class DemoSpringBootForexServiceApplication {
+public class DemoSpringBootForexServiceApplication  {
 
 	public static void main(String[] args) {
 		ApplicationContext context= SpringApplication.run(
 				DemoSpringBootForexServiceApplication.class, args);
 
 	}
+
+
 //
 //	@Bean
 //	public Executor taskExecutor() {

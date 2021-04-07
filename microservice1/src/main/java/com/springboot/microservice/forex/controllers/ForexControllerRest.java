@@ -28,16 +28,20 @@ public class ForexControllerRest {
 
     Integer count = 1;
 
+    @Autowired
     private Environment environment;
 
+//    @Autowired
     private ExchangeValueRepository repository;
 
+//    @Autowired
     private ExchangeValueService exchangeValueService;
 
     public ForexControllerRest() {
     }
 
-    @Autowired
+
+        @Autowired
     public ForexControllerRest(Environment environment,
                                ExchangeValueRepository repository,
                                ExchangeValueService exchangeValueService) {

@@ -8,14 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 
-import javax.annotation.meta.Exhaustive;
-import javax.transaction.Transactional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 @Service
 @NoArgsConstructor
@@ -37,17 +32,18 @@ public class ExchangeValueService {
     }
 
     @Async
-    public final CompletableFuture<ExchangeValue> getAsyncResult(String from, String to){
+    public CompletableFuture<ExchangeValue> getAsyncResult(String from, String to) {
 
         ExchangeValue exchangeValue =
                 repository.findByFromAndTo(from, to);
         exchangeValue.setPort(
                 Integer.parseInt(environment.getProperty("local.server.port")));
-        logger.info("{}",exchangeValue);
+        logger.info("{}", exchangeValue);
 
         logger.info(String.valueOf(count++));
         return CompletableFuture.completedFuture(exchangeValue);
     }
+
 
 
 }
