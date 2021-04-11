@@ -36,8 +36,10 @@ public class ExchangeValue implements Serializable {
 
     @Transient
     private BigDecimal quantity;
+
     @Transient
     private BigDecimal totalCalculatedAmount;
+
     private int port;
 
 }
