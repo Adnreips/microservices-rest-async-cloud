@@ -18,8 +18,12 @@ import javax.jms.Session;
 public class Sender {
     private Logger logger = LoggerFactory.getLogger(Sender.class);
 
-    @Autowired
     JmsTemplate jmsTemplate;
+
+    @Autowired
+    public Sender(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
+    }
 
     public void sendMessage(final String queueName, final String message) {
         logger.info("Sending message {} to queue - {}", message, queueName);

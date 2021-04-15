@@ -21,16 +21,20 @@ import java.util.concurrent.*;
  */
 
 
-
+//Вынести общую часть url наверх
 @RestController
 public class CCControllerRest {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private CurrencyExchangeServiceProxy proxy;
+    public CurrencyExchangeServiceProxy proxy;
 
-     @RequestMapping(value = "/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
+    @Autowired
+    public CCControllerRest(CurrencyExchangeServiceProxy proxy) {
+        this.proxy = proxy;
+    }
+
+    @RequestMapping(value = "/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversionBean convertCurrencyFeign(@PathVariable String from, @PathVariable String to,
                                                        @PathVariable BigDecimal quantity) {
         CurrencyConversionBean response = proxy.retrieveExchangeValue(from, to);
@@ -50,8 +54,12 @@ public class CCControllerRest {
                 uriVariables);
         CurrencyConversionBean response = responseEntity.getBody();
         logger.info("{}", response);
-        return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
+
+
+        CurrencyConversionBean conversionBeanResponse = new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
                 quantity.multiply(response.getConversionMultiple()), response.getPort());
+
+        return conversionBeanResponse;
     }
 
 

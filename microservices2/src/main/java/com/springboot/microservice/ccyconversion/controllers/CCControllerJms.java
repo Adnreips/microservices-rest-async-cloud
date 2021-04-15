@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
+@RequestMapping("/currency-converter")
+
 public class CCControllerJms {
     @Autowired
     private Sender sender;
@@ -23,7 +25,8 @@ public class CCControllerJms {
     @Value("${my.jms.queue.object}")
     private String queueNameObject;
 
-    @RequestMapping("/currency-converter")
+    //Переделать mapping url
+    @RequestMapping("/currency-converte")
     public CurrencyConversionBean convertCurrency(@RequestBody CurrencyConversionBean bean) {
 
         sender.sendMessageObject(queueName, bean);

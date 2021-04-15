@@ -14,14 +14,15 @@ import java.math.BigDecimal;
  *
  * @author "Andrei Prokofiev"
  */
+
 @Data
 @AllArgsConstructor
 @Service
 @NoArgsConstructor
 @Component
+//Добавить сщности request, response
 public class CurrencyConversionBean implements Serializable {
 
-    //    static final long SerialVersionUID = -4862926644813433707L;
     static final long SerialVersionUID = -1;
     private Long id;
     private String from;

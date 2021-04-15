@@ -38,7 +38,7 @@ public class MessageListener {
 
     private CurrencyConversionBean exchangeValue;
 
-//    private static Logger logger = LoggerFactory.getLogger(MessageListener.class);
+
 
 
     @JmsListener(destination = "${my.jms.queue}")

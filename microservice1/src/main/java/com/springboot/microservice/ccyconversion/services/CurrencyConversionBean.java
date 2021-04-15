@@ -17,9 +17,8 @@ import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-@Service
+//@Service
 @NoArgsConstructor
-@Component
 public class CurrencyConversionBean implements Serializable {
 
 //    static final long SerialVersionUID = -4862926644813433707L;

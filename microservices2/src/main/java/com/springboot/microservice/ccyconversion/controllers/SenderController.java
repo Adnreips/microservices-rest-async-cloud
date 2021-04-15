@@ -38,12 +38,12 @@ public class SenderController {
         this.sender = sender;
     }
 
-    @PostMapping("/send")
-    public String send(@RequestBody String messageSample){
-
-        sender.sendMessage(queueName, messageSample);
-        return "sended";
-    }
+//    @PostMapping("/send")
+//    public String send(@RequestBody String messageSample){
+//
+//        sender.sendMessage(queueName, messageSample);
+//        return "sended";
+//    }
 
     @PostMapping("/send2")
     public String sendObject(@RequestBody CurrencyConversionBean messageSample){

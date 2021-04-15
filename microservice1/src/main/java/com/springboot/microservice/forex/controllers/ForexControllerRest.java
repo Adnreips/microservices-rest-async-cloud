@@ -26,20 +26,12 @@ public class ForexControllerRest {
 
     private Logger logger = LoggerFactory.getLogger(ForexControllerRest.class);
 
-    Integer count = 1;
-
-    @Autowired
     private Environment environment;
-
-//    @Autowired
     private ExchangeValueRepository repository;
-
-//    @Autowired
     private ExchangeValueService exchangeValueService;
 
     public ForexControllerRest() {
     }
-
 
         @Autowired
     public ForexControllerRest(Environment environment,
@@ -57,7 +49,6 @@ public class ForexControllerRest {
                 repository.findByFromAndTo(from, to);
         exchangeValue.setPort(
                 Integer.parseInt(environment.getProperty("local.server.port")));
-        logger.info(String.valueOf(count++));
         return exchangeValue;
     }
 
